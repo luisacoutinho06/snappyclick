@@ -17,11 +17,13 @@ Your contribution is important and very welcome! If you have suggestions or impr
 
 ## Did you like my software?
 
-If you enjoyed using my software and want to thank me in any way, a coffee is very welcome! 
+If you liked my software and would like to thank me, a coffee would be greatly appreciated! To submit one, simply click below.
 
 <div align="center">
-    <a href="link">
-        <img src="" width="200" alt="Pay me a coffee">
+    <a href="https://www.paypal.com/donate/?business=Y9A7BVTWYXA42&no_recurring=0&item_name=%0ACool%21+It+looks+like+you+want+to+buy+me+a+coffee.+Feel+free+to+contribute+any+amount.%0A%0AI+hope+you+are+enjoying+my+click+bot%21&currency_code=BRL">
+        <img src="https://github.com/luisacoutinho06/snappyclick/blob/main/img/coffe.gif" width="100" alt="Pay me a coffee">
     </a>
-    <p>Pay me a coffee</p>
+        <a href="https://www.paypal.com/donate/?business=Y9A7BVTWYXA42&no_recurring=0&item_name=%0ACool%21+It+looks+like+you+want+to+buy+me+a+coffee.+Feel+free+to+contribute+any+amount.%0A%0AI+hope+you+are+enjoying+my+click+bot%21&currency_code=BRL">
+       <img src="https://readme-typing-svg.herokuapp.com/?lines=Buy+me+a+coffee!&font=Fira%20Code&color=%FFC0CB&center=true&width=280&height=50">
+    </a>
 </div>
