@@ -1,4 +1,6 @@
 import customtkinter as ctk
+import json
+import os
 from tkinter import Menu
 import config
 from pages.home import HomePage
@@ -6,8 +8,7 @@ from pages.settings import SettingsPage
 from pages.docs_save import DocsSavesPage 
 from pages.about import AboutPage 
 
-
-ctk.set_appearance_mode(config.DEFAULT_THEME)
+CONFIG_FILE = os.path.join(os.path.dirname(__file__), "config", "settings.json")
 ctk.set_default_color_theme("dark-blue")
 
 class SnappyClickApp(ctk.CTk):
@@ -26,9 +27,19 @@ class SnappyClickApp(ctk.CTk):
         self.menu_bar.add_command(label="Docs", command=lambda: self.show_screen("docs_saves"))
         self.menu_bar.add_command(label="Settings", command=lambda: self.show_screen("config"))
         self.menu_bar.add_command(label="About", command=lambda: self.show_screen("about"))
+               
+        # Adding the 'Change Theme' submenu
+        self.theme_menu = Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="Change Theme", menu=self.theme_menu)
+
+        # Adding theme options
+        self.theme_menu.add_command(label="System", command=lambda: self.set_theme("system"))
+        self.theme_menu.add_command(label="Dark", command=lambda: self.set_theme("dark"))
+        self.theme_menu.add_command(label="Light", command=lambda: self.set_theme("light"))
+
         self.menu_bar.add_separator()
         self.menu_bar.add_command(label="Exit", command=self.quit)
-
+        
         # Creating a container
         self.container = ctk.CTkFrame(self)
         self.container.pack(fill="both", expand=True)
@@ -42,6 +53,7 @@ class SnappyClickApp(ctk.CTk):
 
         # Initializing the Home Screen
         self.show_screen("home")
+        self.load_theme()
         
     def show_screen(self, screen_name):
         """ Switches between application screens. """
@@ -58,9 +70,39 @@ class SnappyClickApp(ctk.CTk):
         elif screen_name == "about":
             self.screens[screen_name] = AboutPage(self.screen_frame)
         
-        # Exibindo a nova tela
         self.screens[screen_name].pack(fill="both", expand=True)
+
+    def load_theme(self):
+        """Loads the theme saved in JSON."""
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, "r") as file:
+                settings = json.load(file)
+                theme = settings.get("theme", "system")
+        else:
+            theme = "system"
+
+        self.set_theme(theme)
         
+    def save_theme(self, theme):
+        """Saves the chosen theme in JSON."""
+        with open(CONFIG_FILE, "w") as file:
+            json.dump({"theme": theme}, file)
+
+    def set_theme(self, theme):
+        """Sets the theme and saves the user's choice."""
+        ctk.set_appearance_mode(theme)
+        self.update_theme_menu(theme.capitalize())
+        self.save_theme(theme)
+
+    def update_theme_menu(self, selected_theme):
+        """Updates the menu to show the selected option with a dot."""
+        for i in range(self.theme_menu.index("end") + 1):
+            label = self.theme_menu.entrycget(i, "label")
+            if selected_theme in label:
+                self.theme_menu.entryconfig(i, label="• " + label.lstrip("• "))
+            else:
+                self.theme_menu.entryconfig(i, label=label.lstrip("• "))
+
 if __name__ == "__main__":
     app = SnappyClickApp()
     app.mainloop()
