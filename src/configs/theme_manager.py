@@ -7,7 +7,7 @@ import config
 
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), "settings.json")
 
-def load_theme(self):
+def load_theme(app):
     """Load the saved theme in JSON."""
     theme = "system"  # Default to system if no choice has been made
     if os.path.exists(CONFIG_FILE):
@@ -16,7 +16,7 @@ def load_theme(self):
             theme = settings.get("theme", "system")
     
     set_theme(theme)
-    update_theme_menu(self.theme_menu, theme.capitalize())
+    update_theme_menu(app.theme_menu, theme.capitalize())
 def save_theme(theme):
     """Saves the chosen theme in JSON."""
     with open(CONFIG_FILE, "w") as file:

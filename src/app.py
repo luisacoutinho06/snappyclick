@@ -7,73 +7,71 @@ from pages.docs_save import DocsSavesPage
 from pages.about import AboutPage 
 from configs.theme_manager import *
 
-ctk.set_default_color_theme("dark-blue")
-
 class SnappyClickApp(ctk.CTk):
-    def __init__(self):
+    def __init__(app):
         super().__init__()
-        self.title(config.APP_NAME)
-        self.geometry('{}x{}'.format(config.WINDOW_SIZE_WIDTH, config.WINDOW_SIZE_HEIGHT))
-        self.minsize(config.WINDOW_SIZE_WIDTH, config.WINDOW_SIZE_HEIGHT)
+        app.title(config.APP_NAME)
+        app.geometry('{}x{}'.format(config.WINDOW_SIZE_WIDTH, config.WINDOW_SIZE_HEIGHT))
+        app.minsize(config.WINDOW_SIZE_WIDTH, config.WINDOW_SIZE_HEIGHT)
 
         # Menu bar
-        self.menu_bar = Menu(self)
-        self.config(menu=self.menu_bar)
+        app.menu_bar = Menu(app)
+        app.config(menu=app.menu_bar)
 
         # Adding menu options
-        self.menu_bar.add_command(label="Home", command=lambda: self.show_screen("home"))
-        self.menu_bar.add_command(label="Docs", command=lambda: self.show_screen("docs_saves"))
-        self.menu_bar.add_command(label="Settings", command=lambda: self.show_screen("config"))
-        self.menu_bar.add_command(label="About", command=lambda: self.show_screen("about"))
+        app.menu_bar.add_command(label="Home", command=lambda: app.show_screen("home"))
+        app.menu_bar.add_command(label="Docs", command=lambda: app.show_screen("docs_saves"))
+        app.menu_bar.add_command(label="Settings", command=lambda: app.show_screen("config"))
+        app.menu_bar.add_command(label="About", command=lambda: app.show_screen("about"))
                
         # Adding the 'Change Theme' submenu
-        self.theme_menu = Menu(self.menu_bar, tearoff=0)
-        self.menu_bar.add_cascade(label="Change Theme", menu=self.theme_menu)
+        app.theme_menu = Menu(app.menu_bar, tearoff=0)
+        app.menu_bar.add_cascade(label="Change Theme", menu=app.theme_menu)
 
         # Adding theme options
-        self.theme_menu.add_command(label="System", command=lambda: self.set_theme("system"))
-        self.theme_menu.add_command(label="Dark", command=lambda: self.set_theme("dark"))
-        self.theme_menu.add_command(label="Light", command=lambda: self.set_theme("light"))
+        app.theme_menu.add_command(label="System", command=lambda: app.set_theme("system"))
+        app.theme_menu.add_command(label="Dark", command=lambda: app.set_theme("dark"))
+        app.theme_menu.add_command(label="Light", command=lambda: app.set_theme("light"))
 
-        self.menu_bar.add_separator()
-        self.menu_bar.add_command(label="Exit", command=self.quit)
+        app.menu_bar.add_separator()
+        app.menu_bar.add_command(label="Exit", command=app.quit)
         
         # Creating a container
-        self.container = ctk.CTkFrame(self)
-        self.container.pack(fill="both", expand=True)
+        app.container = ctk.CTkFrame(app)
+        app.container.pack(fill="both", expand=True)
         
         # Creating a frame to swap as screens
-        self.screen_frame = ctk.CTkFrame(self.container)
-        self.screen_frame.pack(side="top", fill="both", expand=True)  # Ensuring this takes the remaining space
+        app.screen_frame = ctk.CTkFrame(app.container)
+        app.screen_frame.pack(side="top", fill="both", expand=True)  # Ensuring this takes the remaining space
 
         # Dictionary to store the screens
-        self.screens = {}
+        app.screens = {}
 
         # Initializing the Home Screen
-        self.show_screen("home")
-        load_theme(self)
+        app.show_screen("home")
+        load_theme(app)
         
-    def show_screen(self, screen_name):
+    def show_screen(app, screen_name):
         """ Switches between application screens. """
-        for widget in self.screen_frame.winfo_children():
+        for widget in app.screen_frame.winfo_children():
             widget.destroy()
         
         # Going to the new screen
         if screen_name == "home":
-            self.screens[screen_name] = HomePage(self.screen_frame)
+            app.screens[screen_name] = HomePage(app.screen_frame)
         elif screen_name == "docs_saves":
-            self.screens[screen_name] = DocsSavesPage(self.screen_frame)
+            app.screens[screen_name] = DocsSavesPage(app.screen_frame)
         elif screen_name == "config":
-            self.screens[screen_name] = SettingsPage(self.screen_frame)
+            app.screens[screen_name] = SettingsPage(app.screen_frame)
         elif screen_name == "about":
-            self.screens[screen_name] = AboutPage(self.screen_frame)
+            app.screens[screen_name] = AboutPage(app.screen_frame)
         
-        self.screens[screen_name].pack(fill="both", expand=True)
+        app.screens[screen_name].pack(fill="both", expand=True)
     
-    def set_theme(self, theme):
+    def set_theme(app, theme):
         """Sets the theme and saves the user's choice."""
         set_theme(theme)
-        update_theme_menu(self.theme_menu, theme.capitalize())
+        update_theme_menu(app.theme_menu, theme.capitalize())
 
 if __name__ == "__main__":
     app = SnappyClickApp()
