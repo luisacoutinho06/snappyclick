@@ -1,14 +1,12 @@
 import customtkinter as ctk
-import json
-import os
 from tkinter import Menu
 import config
 from pages.home import HomePage
 from pages.settings import SettingsPage
 from pages.docs_save import DocsSavesPage 
 from pages.about import AboutPage 
+from configs.theme_manager import *
 
-CONFIG_FILE = os.path.join(os.path.dirname(__file__), "config", "settings.json")
 ctk.set_default_color_theme("dark-blue")
 
 class SnappyClickApp(ctk.CTk):
@@ -53,7 +51,7 @@ class SnappyClickApp(ctk.CTk):
 
         # Initializing the Home Screen
         self.show_screen("home")
-        self.load_theme()
+        load_theme()
         
     def show_screen(self, screen_name):
         """ Switches between application screens. """
@@ -71,37 +69,11 @@ class SnappyClickApp(ctk.CTk):
             self.screens[screen_name] = AboutPage(self.screen_frame)
         
         self.screens[screen_name].pack(fill="both", expand=True)
-
-    def load_theme(self):
-        """Loads the theme saved in JSON."""
-        if os.path.exists(CONFIG_FILE):
-            with open(CONFIG_FILE, "r") as file:
-                settings = json.load(file)
-                theme = settings.get("theme", "system")
-        else:
-            theme = "system"
-
-        self.set_theme(theme)
-        
-    def save_theme(self, theme):
-        """Saves the chosen theme in JSON."""
-        with open(CONFIG_FILE, "w") as file:
-            json.dump({"theme": theme}, file)
-
+    
     def set_theme(self, theme):
         """Sets the theme and saves the user's choice."""
-        ctk.set_appearance_mode(theme)
-        self.update_theme_menu(theme.capitalize())
-        self.save_theme(theme)
-
-    def update_theme_menu(self, selected_theme):
-        """Updates the menu to show the selected option with a dot."""
-        for i in range(self.theme_menu.index("end") + 1):
-            label = self.theme_menu.entrycget(i, "label")
-            if selected_theme in label:
-                self.theme_menu.entryconfig(i, label="• " + label.lstrip("• "))
-            else:
-                self.theme_menu.entryconfig(i, label=label.lstrip("• "))
+        set_theme(theme)
+        update_theme_menu(self.theme_menu, theme.capitalize())
 
 if __name__ == "__main__":
     app = SnappyClickApp()
