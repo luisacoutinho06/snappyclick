@@ -17,11 +17,11 @@ class HomePage(ctk.CTkFrame):
         #button = ButtonComponent(self, text="Cancelar", command=self.on_button_click, color="grey")
         
         # Method used to add the widget to the interface and define its positioning.
-        label.pack(pady=40);
+        label.grid(row=0, column=0, pady=20, padx=20)
         #button.pack(pady=120)
         
     def go_to_settings(self):
         print("Opening settings screen...");    
         
     def on_button_click(self):
-        print("Button clicked!")
+        print("Button clicked!");
