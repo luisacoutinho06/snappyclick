@@ -7,7 +7,7 @@ class SettingsPage(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
         
-        label = ctk.CTkLabel(self, text="Welcome to my app!", **styles.LABEL_TITLE_STYLE)
+        label = ctk.CTkLabel(self, text="Settings", **styles.LABEL_TITLE_STYLE)
         
         # Método usado para adicionar o widget à interface
         label.pack(pady=20)  # Ajuste a distância conforme necessário

@@ -4,6 +4,8 @@ import config
 from pages.home import HomePage
 from pages.settings import SettingsPage
 from pages.docs_save import DocsSavesPage 
+from pages.about import AboutPage 
+
 
 ctk.set_appearance_mode(config.DEFAULT_THEME)
 ctk.set_default_color_theme("dark-blue")
@@ -23,7 +25,7 @@ class SnappyClickApp(ctk.CTk):
         self.menu_bar.add_command(label="Home", command=lambda: self.show_screen("home"))
         self.menu_bar.add_command(label="Docs", command=lambda: self.show_screen("docs_saves"))
         self.menu_bar.add_command(label="Settings", command=lambda: self.show_screen("config"))
-        self.menu_bar.add_command(label="About", command=lambda: self.show_screen("config"))
+        self.menu_bar.add_command(label="About", command=lambda: self.show_screen("about"))
         self.menu_bar.add_separator()
         self.menu_bar.add_command(label="Exit", command=self.quit)
 
@@ -53,6 +55,8 @@ class SnappyClickApp(ctk.CTk):
             self.screens[screen_name] = DocsSavesPage(self.screen_frame)
         elif screen_name == "config":
             self.screens[screen_name] = SettingsPage(self.screen_frame)
+        elif screen_name == "about":
+            self.screens[screen_name] = AboutPage(self.screen_frame)
         
         # Exibindo a nova tela
         self.screens[screen_name].pack(fill="both", expand=True)
