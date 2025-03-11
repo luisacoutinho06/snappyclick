@@ -51,7 +51,7 @@ class SnappyClickApp(ctk.CTk):
 
         # Initializing the Home Screen
         self.show_screen("home")
-        load_theme()
+        load_theme(self)
         
     def show_screen(self, screen_name):
         """ Switches between application screens. """
