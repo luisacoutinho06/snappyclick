@@ -7,7 +7,7 @@ class ButtonComponent(ctk.CTkButton):
         # Applying basic button styling using LABEL_STYLE
         button_style = {
             "fg_color": color,
-            "font": (styles.FONT_FAMILY, styles.FONT_SIZE_BUTTON),
+            "font": (styles.FONT_FAMILY, styles.FONT_SIZE_BUTTON, "bold"),
             "width": 200,  # Button width
             "height": 40,  # Button height
             "corner_radius": 10,  # Corner rounding

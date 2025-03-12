@@ -24,8 +24,5 @@ class HomePage(ctk.CTkFrame):
         labelTitle.grid(row=0, column=0, pady=20, padx=20)
         #button.pack(pady=120)
         
-    def go_to_settings(self):
-        print("Opening settings screen...");    
-        
     def on_button_click(self):
         print("Button clicked!");
