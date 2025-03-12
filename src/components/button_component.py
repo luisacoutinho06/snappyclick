@@ -7,7 +7,6 @@ class ButtonComponent(ctk.CTkButton):
         # Applying basic button styling using LABEL_STYLE
         button_style = {
             "fg_color": color,
-            "text_color": styles.TEXT_COLOR,
             "font": (styles.FONT_FAMILY, styles.FONT_SIZE_BUTTON),
             "width": 200,  # Button width
             "height": 40,  # Button height

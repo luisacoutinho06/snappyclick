@@ -11,13 +11,11 @@ SECONDARY_COLOR = "#FF6347"  # Red
 
 # Title Label Styles
 LABEL_TITLE_STYLE = {
-    "text_color": TEXT_COLOR,
     "font": (FONT_FAMILY, FONT_SIZE_TITLE)
 }
 
 # Label Styles
 LABEL_TITLE_STYLE = {
-    "text_color": TEXT_COLOR,
     "font": (FONT_FAMILY, FONT_SIZE_TEXT)
 }
 
