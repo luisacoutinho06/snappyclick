@@ -2,7 +2,7 @@ import customtkinter as ctk;
 import styles;
 import config;
 from components.button_component import ButtonComponent;
-from components.coordinate_table_component import CoordinateTable;
+from components.coordinate_component import CoordinateTable;
 
 class HomePage(ctk.CTkFrame):
     # Initializing the constructor

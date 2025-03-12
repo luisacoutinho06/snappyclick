@@ -1,18 +1,25 @@
 import customtkinter as ctk
-from CTkMessagebox import CTkMessagebox
+import pyautogui
+import keyboard
+import threading
 from components.button_component import ButtonComponent
+from CTkMessagebox import CTkMessagebox
+from customtkinter import CTkInputDialog
 
 class CoordinateTable(ctk.CTkFrame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
         self.pack(padx=20, pady=10)
+        self.is_recording = False
+        self.coordinates = []
         self.create_widgets()
 
+    """ Building the front """
     def create_widgets(self):
         # Creating two buttons, one to record and one to delete everything
-        buttonStart = ButtonComponent(self, text="Start record of coordinates", command=self.on_button_click, color="green")
-        buttonStop = ButtonComponent(self, text="Stop record of coordinates", command=self.on_button_click, color="red")
+        buttonStart = ButtonComponent(self, text="Start record of coordinates", command=self.start_recording, color="green")
+        buttonStop = ButtonComponent(self, text="Stop record of coordinates", command=self.stop_recording, color="red")
         
         buttonStart.pack(side='top', pady=10, padx=5)
         buttonStop.pack(side='top', pady=10, padx=5)
@@ -21,18 +28,11 @@ class CoordinateTable(ctk.CTkFrame):
         self.table_frame = ctk.CTkScrollableFrame(self, width=600, height=240)
         self.table_frame.pack(padx=10, pady=5)
 
-        # Coordinates data
-        self.coordinates = ["(10,10)", "(20,20)", "(30,30)", "(40,40)", "(50,50)", "(60,60)", "(70,70)", "(70,70)", "(70,70)", "(70,70)"]
-
         # Create the headers manually using CTkLabels
         self.create_headers()
 
         # Initialize a list to store the rows
         self.rows = []
-
-        # Add rows
-        for i, coord in enumerate(self.coordinates, start=1):
-            self.add_row(coord, i)
 
     def create_headers(self):
         # Create the header row manually
@@ -60,19 +60,20 @@ class CoordinateTable(ctk.CTkFrame):
         action_menu = ctk.CTkOptionMenu(self.table_frame, values=actions, command=lambda action: self.handle_action(action, row_num))
         action_menu.grid(row=row_num, column=1, padx=2, pady=2)
         
-        # Edit button with emoji
+        # Edit button
         edit_button = ctk.CTkButton(self.table_frame, text=edit_icon, command=lambda: self.edit_row(row_num), width=20, height=20, fg_color="#00A8FF")
         edit_button.grid(row=row_num, column=2, padx=2, pady=2)
         
-        # Delete button with emoji
+        # Delete button
         delete_button = ctk.CTkButton(self.table_frame, text=delete_icon, command=lambda: self.delete_row(row_num), width=20, height=20, fg_color="red")
         delete_button.grid(row=row_num, column=3, padx=2, pady=2)
 
         # Store the row's widgets to re-use later
         self.rows.append((coord_label, action_menu, edit_button, delete_button))
 
+    """ Functions of the buttons Edit and Delete """
     def edit_row(self, row_num):
-        new_value = ctk.CTkInputDialog(text=f"Edit coordinate {self.coordinates[row_num-1]}:", title="Edit Coordinate").get_input()
+        new_value = CTkInputDialog(text=f"Edit coordinate {self.coordinates[row_num-1]}:", title="Edit Coordinate").get_input()
         if new_value:
             self.coordinates[row_num-1] = new_value
             # Update the label of the corresponding row
@@ -102,8 +103,40 @@ class CoordinateTable(ctk.CTkFrame):
                     widget.grid_forget()
                 self.add_row(coord, i)
 
-    def on_button_click(self):
-        print("Button clicked!")
+    """ Functions to record coordinates """
+    def start_recording(self):
+        self.is_recording = True
+        self.coordinates = []  # Clear previous coordinates
+        self.rows = []  # Clear the rows in the table
+        print("Recording started. Press space to capture coordinates.")
+        
+        # Clear the table (important when restarting)
+        for widget in self.table_frame.winfo_children():
+            widget.grid_forget()
+
+        # Recreate the headers and initialize the row storage
+        self.create_headers()
+        
+        # Use a separate thread to capture coordinates
+        threading.Thread(target=self.capture_coordinate, daemon=True).start()
+
+    def stop_recording(self):
+        self.is_recording = False
+        print("Recording stopped.")
+        
+    def capture_coordinate(self):
+        while self.is_recording:
+            if keyboard.is_pressed('space') and self.is_recording:  # Check space key to capture coordinates
+                cursor_x, cursor_y = pyautogui.position() 
+                coord = f"{cursor_x}, {cursor_y}"
+                self.coordinates.append(coord)
+                print(f"Captured coordinate: {coord}")
+                
+                # Add the coordinate to the table
+                self.add_row(coord, len(self.coordinates))
+                
+                # Scroll the table to the bottom using yview
+                self.table_frame.yview_moveto(1)
 
 if __name__ == "__main__":
     root = ctk.CTk()
