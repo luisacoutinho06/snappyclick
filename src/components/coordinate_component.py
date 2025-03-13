@@ -2,6 +2,7 @@ import customtkinter as ctk
 import pyautogui
 import keyboard
 import threading
+import time
 from components.button_component import ButtonComponent
 from CTkMessagebox import CTkMessagebox
 from customtkinter import CTkInputDialog
@@ -48,7 +49,8 @@ class CoordinateTable(ctk.CTkFrame):
         header_label_4 = ctk.CTkLabel(self.table_frame, text="Delete", width=100)
         header_label_4.grid(row=0, column=3, padx=1, pady=1)
 
-    def add_row(self, coord, row_num):
+    def add_row(self, coord):
+        row_num = len(self.coordinates)
         edit_icon = "Edit" 
         delete_icon = "Delete"
 
@@ -106,8 +108,6 @@ class CoordinateTable(ctk.CTkFrame):
     """ Functions to record coordinates """
     def start_recording(self):
         self.is_recording = True
-        self.coordinates = []  # Clear previous coordinates
-        self.rows = []  # Clear the rows in the table
         print("Recording started. Press space to capture coordinates.")
         
         # Clear the table (important when restarting)
@@ -116,6 +116,9 @@ class CoordinateTable(ctk.CTkFrame):
 
         # Recreate the headers and initialize the row storage
         self.create_headers()
+        
+        for coord in self.coordinates:
+            self.add_row(coord)
         
         # Use a separate thread to capture coordinates
         threading.Thread(target=self.capture_coordinate, daemon=True).start()
@@ -129,14 +132,16 @@ class CoordinateTable(ctk.CTkFrame):
             if keyboard.is_pressed('space') and self.is_recording:  # Check space key to capture coordinates
                 cursor_x, cursor_y = pyautogui.position() 
                 coord = f"{cursor_x}, {cursor_y}"
-                self.coordinates.append(coord)
-                print(f"Captured coordinate: {coord}")
                 
-                # Add the coordinate to the table
-                self.add_row(coord, len(self.coordinates))
+                if not self.coordinates or self.coordinates[-1] != coord:
+                    self.coordinates.append(coord)
+                    print(f"Captured coordinate: {coord}")
                 
-                # Scroll the table to the bottom using yview
-                self.table_frame.yview_moveto(1)
+                    self.add_row(coord)
+
+                    self.table_frame.yview_moveto(1)
+
+                time.sleep(0.3)
 
 if __name__ == "__main__":
     root = ctk.CTk()
